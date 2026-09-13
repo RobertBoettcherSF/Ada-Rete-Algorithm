@@ -67,7 +67,7 @@ package body Rete is
 
    function To_String (S : Symbol) return String is
    begin
-      return To_String (Unbounded_String (S));
+      return Ada.Strings.Unbounded.To_String (Ada.Strings.Unbounded.Unbounded_String (S));
    end To_String;
 
    function "=" (Left, Right : Symbol) return Boolean is
@@ -121,7 +121,7 @@ package body Rete is
       end if;
       Alpha_Count := Alpha_Count + 1;
       Alpha_Nodes (Alpha_Node_ID (Alpha_Count)) := 
-        (Attribute => Attribute, Value => Value, Memory => (Count => 0, Items => (others => <>)));
+        (Attribute => Attribute, Value => Value, Memory => (Count => 0, Items => [others => <>]));
       return Alpha_Node_ID (Alpha_Count);
    end Add_Alpha_Node;
 
@@ -139,7 +139,7 @@ package body Rete is
         (Parent_Beta  => Parent_Beta,
          Parent_Alpha => Parent_Alpha,
          Condition    => Condition,
-         Memory       => (Count => 0, Items => (others => <>)));
+         Memory       => (Count => 0, Items => [others => <>]));
       return Beta_Node_ID (Beta_Count);
    end Add_Beta_Node;
 
@@ -232,7 +232,7 @@ package body Rete is
       if Beta_Nodes (B).Parent_Beta = 0 then
          -- Implicit join with Root node's empty token
          declare
-            Empty_T : constant Token := (Size => 0, Elements => (others => (ID => Null_WME_ID, others => Empty_Symbol)));
+            Empty_T : constant Token := (Size => 0, Elements => [others => (ID => Null_WME_ID, others => Empty_Symbol)]);
          begin
             if Evaluate_Condition (Beta_Nodes (B).Condition, Empty_T, F) then
                declare
