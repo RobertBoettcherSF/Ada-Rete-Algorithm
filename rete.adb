@@ -1,5 +1,4 @@
 package body Rete is
-   use Ada.Strings.Unbounded;
 
    -- =========================================================================
    -- Private Types and State Data Structures
