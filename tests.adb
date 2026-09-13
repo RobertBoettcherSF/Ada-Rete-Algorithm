@@ -72,23 +72,25 @@ begin
    declare
       Thrown : Boolean := False;
    begin
-      Insert_WME ((1, To_Symbol ("E1"), To_Symbol ("color"), To_Symbol ("blue")));
-   exception
-      when Duplicate_ID => Thrown := True;
+      begin
+         Insert_WME ((1, To_Symbol ("E1"), To_Symbol ("color"), To_Symbol ("blue")));
+      exception
+         when Duplicate_ID => Thrown := True;
+      end;
+      Check ("6.1 Re-inserting ID raises Duplicate_ID", Thrown);
+      Check ("6.2 Global memory count unaffected by exception", Get_Global_WM_Count = 2);
+      Check ("6.3 Alpha match count unaffected by duplicate", Get_Alpha_Match_Count (A1) = 1);
    end;
-   Check ("6.1 Re-inserting ID raises Duplicate_ID", Thrown);
-   Check ("6.2 Global memory count unaffected by exception", Get_Global_WM_Count = 2);
-   Check ("6.3 Alpha match count unaffected by duplicate", Get_Alpha_Match_Count (A1) = 1);
 
    -- TEST 7 — Batched WME Insertion
    Put_Line ("TEST 7 — Batched WME Insertion");
    Initialize_Network;
    A1 := Add_Alpha_Node (To_Symbol ("tag"), To_Symbol ("sale"));
-   Insert_WME_Batched ((
+   Insert_WME_Batched ([
       (1, To_Symbol ("Item1"), To_Symbol ("tag"), To_Symbol ("sale")),
       (2, To_Symbol ("Item2"), To_Symbol ("tag"), To_Symbol ("sale")),
       (3, To_Symbol ("Item3"), To_Symbol ("price"), To_Symbol ("high"))
-   ));
+   ]);
    Check ("7.1 Batched inserts correctly increase global WM", Get_Global_WM_Count = 3);
    Check ("7.2 Matching facts land in alpha memory", Get_Alpha_Match_Count (A1) = 2);
    Check ("7.3 Total network remains consistent", True);
@@ -160,11 +162,13 @@ begin
    declare
       Thrown : Boolean := False;
    begin
-      Remove_WME (1);
-   exception
-      when Fact_Not_Found => Thrown := True;
+      begin
+         Remove_WME (1);
+      exception
+         when Fact_Not_Found => Thrown := True;
+      end;
+      Check ("12.3 Attempting to remove deleted fact raises exception", Thrown);
    end;
-   Check ("12.3 Attempting to remove deleted fact raises exception", Thrown);
 
    -- TEST 13 — Cascading Token Sweep on Retraction
    Put_Line ("TEST 13 — Cascading Token Sweep on Retraction");
