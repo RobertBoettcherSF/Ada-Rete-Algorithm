@@ -1,4 +1,5 @@
 package body Rete is
+   use Ada.Strings.Unbounded;
 
    -- =========================================================================
    -- Private Types and State Data Structures
@@ -62,22 +63,22 @@ package body Rete is
 
    function To_Symbol (S : String) return Symbol is
    begin
-      return Symbol (To_Unbounded_String (S));
+      return (Value => To_Unbounded_String (S));
    end To_Symbol;
 
    function To_String (S : Symbol) return String is
    begin
-      return Ada.Strings.Unbounded.To_String (Ada.Strings.Unbounded.Unbounded_String (S));
+      return To_String (S.Value);
    end To_String;
 
    function "=" (Left, Right : Symbol) return Boolean is
    begin
-      return Unbounded_String (Left) = Unbounded_String (Right);
+      return Left.Value = Right.Value;
    end "=";
 
    function Empty_Symbol return Symbol is
    begin
-      return To_Symbol ("");
+      return (Value => Null_Unbounded_String);
    end Empty_Symbol;
 
    -- =========================================================================
