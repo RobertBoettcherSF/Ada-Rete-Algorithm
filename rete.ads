@@ -107,7 +107,9 @@ package Rete is
 private
    use Ada.Strings.Unbounded;
 
-   type Symbol is new Unbounded_String;
+   type Symbol is record
+      Value : Unbounded_String;
+   end record;
 
    Max_WMEs_Per_Token : constant := 8;
    type WME_Array_Internal is array (1 .. Max_WMEs_Per_Token) of WME;
