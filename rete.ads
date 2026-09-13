@@ -57,11 +57,11 @@ package Rete is
 
    -- Clears network and memories
    procedure Initialize_Network 
-     with Global => (In_Out => All);
+     with Global => in out all;
 
    -- Adds an Alpha Node filtering by Attribute and Value
    function Add_Alpha_Node (Attribute : Symbol; Value : Symbol) return Alpha_Node_ID
-     with Global => (In_Out => All),
+     with Global => in out all,
           Pre    => Attribute /= Empty_Symbol and Value /= Empty_Symbol,
           Post   => Add_Alpha_Node'Result > 0 and Add_Alpha_Node'Result <= Max_Nodes;
 
@@ -72,13 +72,13 @@ package Rete is
       Parent_Alpha : Alpha_Node_ID;
       Condition    : Join_Condition
    ) return Beta_Node_ID
-     with Global => (In_Out => All),
+     with Global => in out all,
           Pre    => Parent_Alpha > 0,
           Post   => Add_Beta_Node'Result > 0 and Add_Beta_Node'Result <= Max_Nodes;
 
    -- Associates a named rule with a terminal Beta Node
    procedure Add_Rule (ID : Rule_ID; Name : Symbol; Beta : Beta_Node_ID)
-     with Global => (In_Out => All),
+     with Global => in out all,
           Pre    => ID > 0 and Beta > 0;
 
    -- =========================================================================
@@ -88,18 +88,18 @@ package Rete is
    -- Variant 1: Standard Incremental Insertion
    -- Percolates a WME through Alpha then Beta networks
    procedure Insert_WME (Fact : WME)
-     with Global => (In_Out => All),
+     with Global => in out all,
           Pre    => Fact.ID > 0;
 
    -- Variant 2: Batched Insertion
    type WME_Array is array (Positive range <>) of WME;
    procedure Insert_WME_Batched (Facts : WME_Array)
-     with Global => (In_Out => All);
+     with Global => in out all;
 
    -- Variant 3: State-Sweep Retraction
    -- Cleans matching WMEs from Alpha memories and sweeps Beta tokens
    procedure Remove_WME (ID : WME_ID)
-     with Global => (In_Out => All),
+     with Global => in out all,
           Pre    => ID > 0;
 
    -- =========================================================================
